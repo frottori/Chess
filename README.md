@@ -8,3 +8,5 @@ Evaluating correct and valud moves and the Wngine choose to play the best move b
 - `Chess.com API`: [Published-Data API from Chess.com](https://www.chess.com/news/view/published-data-api#pubapi-general) is a read-only REST API that has information such as player data, game data, and club/tournament information. 
     - [Documentation](https://chesscom.readthedocs.io/en/latest/)
     - Use: Gather already established games from reputable chess players that have been also been evaluated by "human" logic to compare.
+- `Chess Game`: The whole implemenation of the chess game (pygame) and the game engine that computer uses against the player
+- `Stockfish`: The evaluation of games using the stockfish puthon library compated with out chess game engine
