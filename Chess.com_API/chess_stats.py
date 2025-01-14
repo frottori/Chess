@@ -2,6 +2,7 @@ from chessdotcom import get_leaderboards, get_player_game_archives
 import chessdotcom
 import warnings
 import pprint
+import requests
 
 # Suppress the warning about the User-Agent header
 warnings.filterwarnings("ignore", category=UserWarning)
@@ -17,15 +18,16 @@ def print_leaderboards():
     for category in categories:
         print("Category:", category)
         for idx, entry in enumerate(data[category]):
-            print(f'Rank: {idx+1} | Username: {entry["username"]} | Rating: {entry["score"]}')
+            print(entry)
+            # username = entry["username"]
+            # score = entry["score"]
+            # print(f'Rank: {idx+1} | Username: {username} | Rating: {score}')
 
-    # Print the entire JSON response to understand its structure
-    # printer.pprint(data.json)
-    # If 'daily' exists, print it specifically
-    # if 'daily' in data.json:
-    #     printer.pprint(data.json['daily'])
-    # else:
-    #     print("Key 'daily' not found in the JSON response.")
+    # if 'daily' exists, print it specifically
+    if 'daily' in data:
+        printer.print(data['daily'])
+    else:
+        print("Key 'daily' not found in the JSON response.")
 
 def print_player_game_archives():
     headers = {"User-Agent": "My-Application/1.0"}
@@ -36,3 +38,4 @@ def print_player_game_archives():
 
 if __name__ == "__main__":
     print_leaderboards()
+    # print_player_game_archives()
