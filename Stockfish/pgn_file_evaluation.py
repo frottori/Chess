@@ -30,3 +30,9 @@ for move, eval_ in evaluations:
         print(f"Move: {move}, Evaluation: {eval_score} centipawns")
     elif eval_["type"] == "mate":
         print(f"Move: {move}, Evaluation: Mate in {eval_['value']} moves")
+
+# Centipawn loss
+# This value can be used as an indicator of the quality of play. 
+# The fewer centipawns one loses per move, the stronger the play. 
+# The computer analysis on Lichess is powered by Stockfish. a centipawn cP 
+# is 1/100 of the worth of a pawn.
