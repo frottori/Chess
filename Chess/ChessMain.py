@@ -53,17 +53,30 @@ def main():
 
     running = True
     sqSelected = ()     # no square is selected, keep track of the last click of the user (tuple: (row, col))
-    playerClicks = []   # keep track of player clicks (two tuples: [(6, 4), (4, 4)])
+    playerClicks = []   # keep track of player 2 clicks (two tuples: [(6, 4), (4, 4)]) (source, destination)
+    draw_game_state(screen, gs) # Draw the initial game state
     
     while running:
         for e in p.event.get():
             if e.type == p.QUIT:
                 running = False
             elif e.type == p.MOUSEBUTTONDOWN:
-                loc = p.mouse.get_pos() # (x, y) location of the mouse
-                col = loc[0] // SQUARE_SIZE # x / SQUARE_SIZE
-                row = loc[1] // SQUARE_SIZE # y / SQUARE_SIZE
-        draw_game_state(screen, gs)
+                loc = p.mouse.get_pos()         # (x, y) location of the mouse
+                col = loc[0] // SQUARE_SIZE     # x / SQUARE_SIZE
+                row = loc[1] // SQUARE_SIZE     # y / SQUARE_SIZE
+                if sqSelected != (row, col):    # double click same square
+                    sqSelected = (row, col)
+                    playerClicks.append(sqSelected) 
+                else:
+                    sqSelected = ()
+                    playerClicks = []
+                if len(playerClicks) == 2:
+                    move = ChessEngine.Move(playerClicks[0], playerClicks[1], gs.board)
+                    gs.make_move(move)
+                    draw_game_state(screen, gs)
+                    sqSelected = ()
+                    playerClicks = []
+
         clock.tick(MAX_FPS) # Cap the framerate
         p.display.flip()    # Update the screen
 

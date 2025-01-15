@@ -30,7 +30,7 @@ def draw_game_state(screen, gs):
     draw_board(screen)                                    # Draw the squares on the board
     draw_pieces(screen, gs.board)                         # Draw the pieces on top of the squares
     eval_value, mate_moves = gs.get_evaluation()
-    draw_eval_bar(screen, eval_value, mate_moves)    # Draw the evaluation bar
+    draw_eval_bar(screen, eval_value, mate_moves, gs)    # Draw the evaluation bar
     
 # Draw the squares on the board
 def draw_board(screen):
@@ -57,8 +57,20 @@ def draw_pieces(screen, board):
                     p.Rect(board_offset_x + col * SQUARE_SIZE, row * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE)
                 )
 
+def draw_selection(screen, gs, sqSelected, is_selected):
+    board_offset_x = BAR_WIDTH
+    row, col = sqSelected
+    if is_selected:
+        color = p.Color("#8ec7e9") if (row + col) % 2 == 0 else p.Color("#378ccc") # highlight the square (dependig if light or dark square)
+    else:
+        color = p.Color("#a0b9cf") if (row + col) % 2 == 0 else p.Color("#7e98ac") # reset the color of the square
+    p.draw.rect(
+        screen, color, 
+        p.Rect(board_offset_x + col * SQUARE_SIZE, row * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE), 4
+    )
+
 # Function to draw the evaluation bar
-def draw_eval_bar(screen, eval_value, mate_moves):
+def draw_eval_bar(screen, eval_value, mate_moves, gs):
     font = p.font.SysFont("Consolas", 14)
     # Scale evaluation value to the range (-10 to 10) and normalize
     eval_clamped = max(-10, min(10, eval_value))  # Clamped to [-10, 10]
@@ -69,10 +81,14 @@ def draw_eval_bar(screen, eval_value, mate_moves):
     p.draw.rect(screen, p.Color("#000000"), (0, 0, BAR_WIDTH, BAR_HEIGHT - white_bar_height))                 # Black bar
 
     # Draw midpoint line
+    if gs.whiteToMove:
+        color = p.Color("#a0b9cf")
+    else:
+        color = p.Color("#7e98ac")
     p.draw.line(
-        screen, p.Color("#9b9b9b"), 
-        (0, BAR_HEIGHT // 2), (BAR_WIDTH, BAR_HEIGHT // 2), 3
-    )
+            screen, color, 
+            (0, BAR_HEIGHT // 2), (BAR_WIDTH, BAR_HEIGHT // 2), 3
+        )
     # Display the evaluation value
     if mate_moves == 0:
         eval_text = font.render("1-0", True, p.Color("#9b9b9b"))
@@ -94,7 +110,7 @@ def main():
     load_images()                                   # Load the images of the pieces
 
     running = True
-    sqSelected = ()     # No square is selected, keep track of the last click of the user (tuple: (row, col))
+    sqSelected = ()     # square selected by the user (tuple: (row, col))
     playerClicks = []   # Keep track of player clicks (two tuples: [(6, 4), (4, 4)])
     draw_game_state(screen, gs) # initial draw of the game state
 
@@ -105,8 +121,21 @@ def main():
             elif e.type == p.MOUSEBUTTONDOWN:
                 loc = p.mouse.get_pos()  # (x, y) location of the mouse
                 col = (loc[0] - BAR_WIDTH) // SQUARE_SIZE  # Adjust for board offset
-                row = loc[1] // SQUARE_SIZE                
-                draw_game_state(screen, gs) # update the screen when a move is made
+                row = loc[1] // SQUARE_SIZE                 
+                if sqSelected != (row, col):    # double click same square
+                    sqSelected = (row, col)
+                    draw_selection(screen, gs, sqSelected, is_selected=True)
+                    playerClicks.append(sqSelected) 
+                else:
+                    draw_selection(screen, gs, sqSelected, is_selected=False)
+                    sqSelected = ()
+                    playerClicks = []
+                if len(playerClicks) == 2:
+                    move = ChessEngine.Move(playerClicks[0], playerClicks[1], gs.board)
+                    gs.make_move(move)
+                    draw_game_state(screen, gs)
+                    sqSelected = ()
+                    playerClicks = []
         clock.tick(MAX_FPS)  # Cap the framerate
         p.display.flip()    # Update the screen
 
