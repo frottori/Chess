@@ -3,7 +3,12 @@ An implementation of Chess with a player vs Computer (Engine).
 Evaluating correct and valud moves and the Wngine choose to play the best move based on it's calculations. Compared with Stockfish the chess game engine that has the highest elo in the world we evaluate our chess engine and how efficient it is on evaluating the best move.
 
 <p align="center">
-    <img src="demo.png" alt="Demo" width="350" height="350">
+    <img src="demo_images/demo1.png" alt="Demo 1" width="350" height="350">
+    <img src="demo_images/demo2.png" alt="Demo 2" width="350" height="350">
+</p>
+<p align="center">
+    <img src="demo_images/demo3.png" alt="Demo 3" width="350" height="350">
+    <img src="demo_images/demo4.png" alt="Demo 4" width="350" height="350">
 </p>
 
 ## File Structure 
