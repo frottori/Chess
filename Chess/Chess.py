@@ -57,18 +57,6 @@ def draw_pieces(screen, board):
                     p.Rect(board_offset_x + col * SQUARE_SIZE, row * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE)
                 )
 
-def draw_selection(screen, gs, sqSelected, is_selected):
-    board_offset_x = BAR_WIDTH
-    row, col = sqSelected
-    if is_selected:
-        color = p.Color("#8ec7e9") if (row + col) % 2 == 0 else p.Color("#378ccc") # highlight the square (dependig if light or dark square)
-    else:
-        color = p.Color("#a0b9cf") if (row + col) % 2 == 0 else p.Color("#7e98ac") # reset the color of the square
-    p.draw.rect(
-        screen, color, 
-        p.Rect(board_offset_x + col * SQUARE_SIZE, row * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE), 4
-    )
-
 # Function to draw the evaluation bar
 def draw_eval_bar(screen, eval_value, mate_moves, gs):
     font = p.font.SysFont("Consolas", 14)
@@ -98,6 +86,18 @@ def draw_eval_bar(screen, eval_value, mate_moves, gs):
         eval_text = font.render(f"{abs(eval_value):.2f}", True, p.Color("#9b9b9b"))
     text_rect = eval_text.get_rect(center=(BAR_WIDTH // 2, (BAR_HEIGHT // 2) - 20))  # Centered above midpoint line
     screen.blit(eval_text, text_rect)
+
+def draw_selection(screen, gs, sqSelected, is_selected):
+    board_offset_x = BAR_WIDTH
+    row, col = sqSelected
+    if is_selected:
+        color = p.Color("#8ec7e9") if (row + col) % 2 == 0 else p.Color("#378ccc") # highlight the square (dependig if light or dark square)
+    else:
+        color = p.Color("#a0b9cf") if (row + col) % 2 == 0 else p.Color("#7e98ac") # reset the color of the square
+    p.draw.rect(
+        screen, color, 
+        p.Rect(board_offset_x + col * SQUARE_SIZE, row * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE), 4
+    )
 
 def main():
     # Initialize a window
