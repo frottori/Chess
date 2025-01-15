@@ -7,7 +7,7 @@ import ChessEngine
 from stockfish import Stockfish
 
 # Global Constants
-BOARD_SIZE = 500                            # Dimensions of the chessboard
+BOARD_SIZE = 600                            # Dimensions of the chessboard
 DIMENSION = 8                               # Dimensions of a chess board are 8x8
 SQUARE_SIZE = BOARD_SIZE // DIMENSION       # Size of each square on the board
 BAR_WIDTH = SQUARE_SIZE // 2                # Width of the evaluation bar
@@ -59,7 +59,7 @@ def draw_pieces(screen, board):
 
 # Function to draw the evaluation bar
 def draw_eval_bar(screen, eval_value, mate_moves):
-    font = p.font.Font(None, 19)
+    font = p.font.SysFont("Consolas", 14)
     # Scale evaluation value to the range (-10 to 10) and normalize
     eval_clamped = max(-10, min(10, eval_value))  # Clamped to [-10, 10]
     white_bar_height = int((eval_clamped + 10) / 20 * HEIGHT)  # Normalize to [0, HEIGHT]
