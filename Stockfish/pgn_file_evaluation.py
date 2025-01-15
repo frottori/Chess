@@ -45,7 +45,7 @@ for move, eval in evaluations:
         eval_value = round(eval["value"] * 0.01, 2)  # e.g -1.50 like chess.com
         print(f"{num_move}. {player} Move: {move}, Evaluation: {eval_value} centipawns")
     elif eval["type"] == "mate":
-        print(f"{num_move}. {player} Move: {move}, Evaluation: Mate in {eval["value"]} moves")
+        print(f"{num_move}. {player} Move: {move}, Evaluation: Mate in {eval['value']} moves")
 
 # Centipawn loss
 # This value can be used as an indicator of the quality of play. 
