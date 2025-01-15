@@ -6,7 +6,10 @@ from stockfish import Stockfish
 stockfish = Stockfish("/opt/homebrew/bin/stockfish", parameters={"Threads": 2, "Hash": 128})
 
 # Path to your PGN file
-pgn_path = "Stockfish/game1.pgn"
+username = input("Enter the username for latest PGN game: ")
+pgn_path = "PGNs/" + username + "_latest_game.pgn"
+if username == "":
+    pgn_path = "PGNs/magnuscarlsen_latest_game.pgn"
 
 # Open the PGN file
 with open(pgn_path) as pgn_file:
