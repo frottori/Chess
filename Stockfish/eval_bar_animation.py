@@ -44,7 +44,7 @@ def draw_eval_bar(eval_value, smooth_value):
     )  # Horizontal midpoint line
 
     # Display the evaluation value
-    eval_text = font.render(f"{eval_value:.2f}", True, RED)
+    eval_text = font.render(f"{eval_value:.2f}", True, MIDPOINT_COLOR)
     text_rect = eval_text.get_rect(center=(WIDTH // 2, (HEIGHT // 2) - 20))  # Centered above midpoint line
     screen.blit(eval_text, text_rect)
 
@@ -87,7 +87,7 @@ for move in game.mainline_moves():
     steps = 50  # Number of animation steps
     for step in range(steps):
         smooth_eval = current_eval + (eval_value - current_eval) * (step / steps)
-        draw_eval_bar(eval_value, smooth_eval)
+        draw_eval_bar(abs(eval_value), smooth_eval)
         time.sleep(0.02)  # Pause for smoother animation
 
         # Pygame event handling
