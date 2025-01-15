@@ -1,15 +1,4 @@
-from stockfish import Stockfish
-
-stockfish = Stockfish(path="/opt/homebrew/bin/stockfish", 
-                      depth=18, 
-                      parameters={"Threads": 2, "Minimum Thinking Time": 30})
-
-# Example: Set a position
 fen = input("Enter a FEN string: ")
-stockfish.set_fen_position(fen)
-
-# Get the FEN string from Stockfish
-fen = stockfish.get_fen_position()
 
 # Function to convert FEN to a 2D list with color and piece type
 def fen_to_board(fen):
