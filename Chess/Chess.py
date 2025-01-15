@@ -58,7 +58,6 @@ def draw_pieces(screen, board):
                 )
 
 # Function to draw the evaluation bar
-#!!! Have to add logic for displaying the evaluation value with stockfish each time the board is updated
 def draw_eval_bar(screen, eval_value, mate_moves):
     font = p.font.Font(None, 19)
     # Scale evaluation value to the range (-10 to 10) and normalize

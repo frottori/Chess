@@ -59,7 +59,8 @@ class GameState():
     
     def get_evaluation(self):
         stockfish = Stockfish("/opt/homebrew/bin/stockfish", parameters={"Threads": 2, "Hash": 1024})
-        stockfish.set_fen_position(self.get_fen())
+        fen = self.get_fen()
+        stockfish.set_fen_position(fen)
         evaluation = stockfish.get_evaluation()
 
         # Convert evaluation to centipawns if not mate
@@ -70,6 +71,3 @@ class GameState():
             eval_value = 10 if evaluation["value"] >= 0 else -10      
             mate_moves = abs(evaluation["value"])   
         return eval_value, mate_moves
-    
-    # def make_pgn(self):
-    #     pass
