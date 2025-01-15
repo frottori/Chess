@@ -5,6 +5,7 @@ Responsible for handling user input and displaying the current GameState object.
 import pygame as p
 import ChessEngine
 
+# Global Constants
 WIDTH = HEIGHT = 512                        # Resolution quality of the board (also 400)
 DIMENSION = 8                               # Dimensions of a chess board are 8x8
 SQUARE_SIZE = HEIGHT // DIMENSION           # Size of each square on the board
@@ -18,12 +19,12 @@ def load_images():
         # e.g. IMAGES["wp"]
 
 # Draws graphics of current game state 
-def drawGameState(screen, gstate):
-    drawBoard(screen)                   # Draw the squares on the board
-    drawPieces(screen, gstate.board)    # Draw the pieces on top of the squares
+def draw_game_state(screen, gstate):
+    draw_board(screen)                   # Draw the squares on the board
+    draw_pieces(screen, gstate.board)    # Draw the pieces on top of the squares
 
 # Draw the squares on the board
-def drawBoard(screen):
+def draw_board(screen):
     # the top left square is always light so we start with white
     colors = [p.Color("#a0b9cf"), p.Color("#7e98ac")]
     for row in range(DIMENSION):
@@ -32,7 +33,7 @@ def drawBoard(screen):
             p.draw.rect(screen, color, p.Rect(col*SQUARE_SIZE, row*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE)) # (x,y,width,height) x = col and y = row
 
 # Draw the pieces on top of the squares with current game state from GameState.board
-def drawPieces(screen, board):
+def draw_pieces(screen, board):
     for row in range(DIMENSION):
         for col in range(DIMENSION):
             piece = board[row][col]
@@ -58,7 +59,11 @@ def main():
         for e in p.event.get():
             if e.type == p.QUIT:
                 running = False
-        drawGameState(screen, gs)
+            elif e.type == p.MOUSEBUTTONDOWN:
+                loc = p.mouse.get_pos() # (x, y) location of the mouse
+                col = loc[0] // SQUARE_SIZE # x / SQUARE_SIZE
+                row = loc[1] // SQUARE_SIZE # y / SQUARE_SIZE
+        draw_game_state(screen, gs)
         clock.tick(MAX_FPS) # Cap the framerate
         p.display.flip()    # Update the screen
 
