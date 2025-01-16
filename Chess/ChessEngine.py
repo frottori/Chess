@@ -239,7 +239,7 @@ class GameState():
     def get_evaluation(self):
         try:
             stockfish = Stockfish("/opt/homebrew/bin/stockfish", parameters={"Threads": 2, "Hash": 1024})
-            # stockfish.set_depth(17)
+            stockfish.set_depth(20)
             fen = self.get_fen()
             stockfish.set_fen_position(fen)
             evaluation = stockfish.get_evaluation()

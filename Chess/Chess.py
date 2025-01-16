@@ -77,7 +77,6 @@ def draw_eval_bar(screen, eval_value, mate_moves, gs):
     # Display the mate or who won
     draw_black = False 
     draw_white = False
-    color = p.Color("#000000")
     
     if mate_moves == 0:   
         draw_black = True if gs.whiteToMove else False
