@@ -107,6 +107,9 @@ def main():
     clock = p.time.Clock()                          # For animations (framerate)
     screen.fill(p.Color("#a0b9cf"))                 # Fill the screen with white color
     gs = ChessEngine.GameState()                    # Initialize the game state
+
+    validMoves = gs.get_valid_moves()
+    moveMade = False
     load_images()                                   # Load the images of the pieces
 
     running = True
@@ -118,26 +121,49 @@ def main():
         for e in p.event.get():
             if e.type == p.QUIT:
                 running = False
+            # Mouse handler
             elif e.type == p.MOUSEBUTTONDOWN:
                 loc = p.mouse.get_pos()  # (x, y) location of the mouse
                 col = (loc[0] - BAR_WIDTH) // SQUARE_SIZE  # Adjust for board offset
                 row = loc[1] // SQUARE_SIZE                 
                 if sqSelected != (row, col):    # double click same square
                     sqSelected = (row, col)
+                    playerClicks.append(sqSelected)
                     draw_selection(screen, gs, sqSelected, is_selected=True)
-                    playerClicks.append(sqSelected) 
                 else:
                     draw_selection(screen, gs, sqSelected, is_selected=False)
                     sqSelected = ()
                     playerClicks = []
                 if len(playerClicks) == 2:
                     move = ChessEngine.Move(playerClicks[0], playerClicks[1], gs.board)
-                    gs.make_move(move)
-                    draw_game_state(screen, gs)
-                    sqSelected = ()
-                    playerClicks = []
+                    if move in validMoves:
+                        gs.make_move(move)
+                        moveMade = True
+                    else:
+                        tuple1 = playerClicks[0]
+                        tuple2 = playerClicks[1]
+                        draw_selection(screen, gs, tuple1, is_selected=False)
+                        draw_selection(screen, gs, tuple2, is_selected=False)
+                        sqSelected = ()
+                        playerClicks = []
+            # Key Handler 
+            elif e.type == p.KEYDOWN:
+                if (valid_keystroke(e.key)):
+                    gs.undo_move()
+                    moveMade = True
+        if moveMade:
+            validMoves = gs.get_valid_moves()
+            draw_game_state(screen, gs)
+            draw_selection(screen, gs, sqSelected, is_selected=False)
+            sqSelected = ()
+            playerClicks = []
+            moveMade = False
+        # print(sqSelected)
         clock.tick(MAX_FPS)  # Cap the framerate
         p.display.flip()    # Update the screen
+
+def valid_keystroke(key):
+    return key == p.K_z and (p.key.get_mods() & p.KMOD_CTRL) or key == p.K_z and (p.key.get_mods() & p.KMOD_META)
 
 if __name__ == "__main__":
     main()
