@@ -221,25 +221,25 @@ class GameState():
         return fen   
     
     # Function to map the numpy array to the chess.Board() object (FOW NOW FOR EVAL TO WORK PROPERLY, I WILL FIX GET_FEN() LATER)
-    def to_chess_board(self):
-        # Create the empty board object
-        board = chess.Board(fen="8/8/8/8/8/8/8/8 w - - 0 1")
+    # def to_chess_board(self):
+    #     # Create the empty board object
+    #     board = chess.Board(fen="8/8/8/8/8/8/8/8 w - - 0 1")
         
-        # Map the numpy array to the chessboard's squares
-        for row in range(8):
-            for col in range(8):
-                piece = self.board[row][col]
-                if piece != "--":
-                    # Determine the piece and place it on the board
-                    chess_piece = piece[1].upper() if piece[0] == "w" else piece[1].lower()
-                    square = chess.square(col, 7 - row)  # Flip rows to match board orientation
-                    board.set_piece_at(square, chess.Piece.from_symbol(chess_piece)) 
-        return board
+    #     # Map the numpy array to the chessboard's squares
+    #     for row in range(8):
+    #         for col in range(8):
+    #             piece = self.board[row][col]
+    #             if piece != "--":
+    #                 # Determine the piece and place it on the board
+    #                 chess_piece = piece[1].upper() if piece[0] == "w" else piece[1].lower()
+    #                 square = chess.square(col, 7 - row)  # Flip rows to match board orientation
+    #                 board.set_piece_at(square, chess.Piece.from_symbol(chess_piece)) 
+    #     return board
     
     def get_evaluation(self):
         try:
             stockfish = Stockfish("/opt/homebrew/bin/stockfish", parameters={"Threads": 2, "Hash": 1024})
-            # stockfish.set_depth(17)
+            stockfish.set_depth(17)
             fen = self.get_fen()
             stockfish.set_fen_position(fen)
             evaluation = stockfish.get_evaluation()

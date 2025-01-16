@@ -138,6 +138,7 @@ def main():
                     move = ChessEngine.Move(playerClicks[0], playerClicks[1], gs.board)
                     if move in validMoves:
                         gs.make_move(move)
+                        draw_selection(screen, gs, sqSelected, is_selected=False)
                         moveMade = True
                     else:
                         tuple1 = playerClicks[0]
@@ -153,8 +154,7 @@ def main():
                     moveMade = True
         if moveMade:
             validMoves = gs.get_valid_moves()
-            draw_game_state(screen, gs)
-            draw_selection(screen, gs, sqSelected, is_selected=False)
+            draw_game_state(screen, gs)   
             sqSelected = ()
             playerClicks = []
             moveMade = False
