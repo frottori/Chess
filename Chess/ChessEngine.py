@@ -93,36 +93,34 @@ class GameState():
         if col + 1 <= self.lenCol - 1: # Capture to the right/left
             if self.board[next_row][col + 1][0] == other_player:
                 moves.append(Move((row, col), (next_row, col + 1), self.board))     
+        #^ add pawn promotion, en-passant
         
     def get_rook_moves(self, row, col, moves):
-        if row+1 <= self.lenRow - 1:
-            self.rook_helper(row+1,len(self.board[row]),  1, "row", row, col, moves)
-        if row-1 >= 0:
-            self.rook_helper(row-1, -1, -1, "row", row, col, moves)
-        if col+1 <= self.lenCol - 1:
-            self.rook_helper(col+1, len(self.board[row]), 1, "col", row, col, moves)
-        if col-1 >= 0:
-            self.rook_helper(col-1, -1, -1, "col", row, col, moves)
-        return moves
+        directions = [(1, 0), (-1, 0), (0, 1), (0, -1)] # up left down right
+        self.bishop_rook_helper(row, col, moves, directions)               
 
-    def rook_helper(self, start, length, step, flag, row, col, moves):
-        for k in range(start, length, step):
-            if flag == "row":
-                if self.board[k][col] == "--":
-                    moves.append(Move((row, col), (k, col), self.board))
+    def get_bishop_moves(self, row, col, moves):
+        directions = [(1, 1), (1, -1), (-1, 1), (-1, -1)]
+        self.bishop_rook_helper(row, col, moves, directions)   
+    
+    def bishop_rook_helper(self, row, col, moves, directions):
+        enemyColor = "b" if self.whiteToMove else "w"
+        for d in directions:
+            for i in range(1, self.lenRow):
+                endRow = row + d[0] * i
+                endCol = col + d[1] * i
+                if 0 <= endRow < self.lenRow and 0 <= endCol < self.lenCol:
+                    endPiece = self.board[endRow][endCol]
+                    if endPiece == "--":
+                        moves.append(Move((row, col), (endRow, endCol), self.board))
+                    elif endPiece[0] == enemyColor:
+                        moves.append(Move((row, col), (endRow, endCol), self.board))
+                        break
+                    else:
+                        break
                 else:
-                    if self.board[k][col][0] != self.board[row][col][0]:  # Opposite color piece
-                        moves.append(Move((row, col), (k, col), self.board))
                     break
-            else:
-                if self.board[row][k] == "--":
-                    moves.append(Move((row, col), (row, k), self.board))
-                else:
-                    if self.board[row][k][0] != self.board[row][col][0]:  # Opposite color piece
-                        moves.append(Move((row, col), (row, k), self.board))
-                    break
-                    
-
+                
     def get_knight_moves(self, row, col, moves):
         knight_moves = [
             (row - 2, col - 1), (row - 2, col + 1),
@@ -137,54 +135,20 @@ class GameState():
                 if self.board[r][c] == "--" or self.board[r][c][0] != self.board[row][col][0]:
                     moves.append(Move((row, col), (r, c), self.board))
 
-    def get_bishop_moves(self, row, col, moves):
-        if row+1 <= self.lenRow - 1 and col+1 <= self.lenCol - 1:
-            self.bishop_helper(row+1, col+1, 1, 1, row, col, moves)
-        if row+1 <= self.lenRow - 1 and col-1 >= 0:
-            self.bishop_helper(row+1, col-1, 1, -1, row, col, moves)
-        if row-1 >= 0 and col+1 <= self.lenCol - 1:
-            self.bishop_helper(row-1, col+1, -1, 1, row, col, moves)
-        if row-1 >= 0 and col-1 >= 0:
-            self.bishop_helper(row-1, col-1, -1, -1, row, col, moves)
-        return moves
-    
-    def bishop_helper(self, start_row, start_col, row_step, col_step, row, col, moves):
-        r, c = start_row, start_col
-        while 0 <= r < self.lenRow and 0 <= c < self.lenCol:
-            if self.board[r][c] == "--":
-                moves.append(Move((row, col), (r, c), self.board))
-            else:
-                if self.board[r][c][0] != self.board[row][col][0]:
-                    moves.append(Move((row, col), (r, c), self.board))
-                break
-            r += row_step
-            c += col_step
-
     def get_queen_moves(self, row, col, moves):
-        moves.append(self.get_rook_moves(row, col, moves))
-        moves.append(self.get_bishop_moves(row, col, moves))
+        self.get_rook_moves(row, col, moves)
+        self.get_bishop_moves(row, col, moves)
 
     def get_king_moves(self, row, col, moves):
-        if row+1 <= self.lenRow - 1:
-            self.king_helper(row+1, col, row, col, moves)
-        if row-1 >= 0:
-            self.king_helper(row-1, col, row, col, moves)
-        if col+1 <= self.lenCol - 1:
-            self.king_helper(row, col+1, row, col, moves)
-        if col-1 >= 0:
-            self.king_helper(row, col-1, row, col, moves)
-        if row+1 <= self.lenRow -1 and col+1 <= self.lenCol - 1:
-            self.king_helper(row+1, col+1, row, col, moves)
-        if row+1 <= self.lenRow - 1 and col-1 >= 0:
-            self.king_helper(row+1, col-1, row, col, moves)
-        if row-1 >= 0 and col+1 <= self.lenCol - 1:
-            self.king_helper(row-1, col+1, row, col, moves)
-        if row-1 >= 0 and col-1 >= 0:
-            self.king_helper(row-1, col-1, row, col, moves)
-
-    def king_helper(self, r, c, row, col, moves):
-        if self.board[r][c] == "--" or self.board[r][c][0] != self.board[row][col][0]:
-            moves.append(Move((row, col), (r, c), self.board))       
+        directions = [(1, 0), (-1, 0), (0, 1), (0, -1), (1, 1), (1, -1), (-1, 1), (-1, -1)]
+        allyColor = "w" if self.whiteToMove else "b"
+        for i in range(len(directions)):
+            r = row + directions[i][0]
+            c = col + directions[i][1]
+            if 0 <= r < self.lenRow and 0 <= c < self.lenCol:
+                endPiece = self.board[r][c]
+                if endPiece[0] != allyColor:
+                    moves.append(Move((row, col), (r, c), self.board))      
 
     """
     Functions to get the evaluation of the current position. FEN NEEDS TO BE FIXED
