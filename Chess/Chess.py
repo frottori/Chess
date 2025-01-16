@@ -90,6 +90,8 @@ def draw_eval_bar(screen, eval_value, mate_moves, gs):
 def draw_selection(screen, gs, sqSelected, is_selected):
     board_offset_x = BAR_WIDTH
     row, col = sqSelected
+    if row < 0 or col < 0:
+        return
     if is_selected:
         color = p.Color("#8ec7e9") if (row + col) % 2 == 0 else p.Color("#378ccc") # highlight the square (dependig if light or dark square)
     else:
@@ -125,7 +127,7 @@ def main():
             elif e.type == p.MOUSEBUTTONDOWN:
                 loc = p.mouse.get_pos()  # (x, y) location of the mouse
                 col = (loc[0] - BAR_WIDTH) // SQUARE_SIZE  # Adjust for board offset
-                row = loc[1] // SQUARE_SIZE                 
+                row = loc[1] // SQUARE_SIZE              
                 if sqSelected != (row, col):    # double click same square
                     sqSelected = (row, col)
                     playerClicks.append(sqSelected)
