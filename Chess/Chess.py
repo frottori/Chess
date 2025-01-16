@@ -153,12 +153,9 @@ def main():
                         draw_selection(screen, gs, sqSelected, is_selected=False)
                         moveMade = True
                     else:
-                        tuple1 = playerClicks[0]
-                        tuple2 = playerClicks[1]
-                        draw_selection(screen, gs, tuple1, is_selected=False)
-                        draw_selection(screen, gs, tuple2, is_selected=False)
-                        sqSelected = ()
-                        playerClicks = []
+                        draw_selection(screen, gs, playerClicks[0], is_selected=False)
+                        playerClicks = [playerClicks[1]]
+                        draw_selection(screen, gs, sqSelected, is_selected=True)
             # Key Handler 
             elif e.type == p.KEYDOWN:
                 if (valid_keystroke(e.key)):
