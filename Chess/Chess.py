@@ -65,40 +65,38 @@ def draw_eval_bar(screen, eval_value, mate_moves, gs):
     eval_clamped = max(-10, min(10, eval_value))  # Clamped to [-10, 10]
     white_bar_height = int((eval_clamped + 10) / 20 * HEIGHT)  # Normalize to [0, HEIGHT]
 
+    eval_text = font.render(f"{abs(eval_value):.2f}", True, p.Color("#9b9b9b"))
     if eval_value > 0:
-        eval_text = font.render(f"{abs(eval_value):.2f}", True, p.Color("#9b9b9b"))
         text_rect = eval_text.get_rect(center=(BAR_WIDTH // 2, BAR_HEIGHT - 20))  # All the way down
-        p.draw.rect(screen, p.Color("#ffffff"), (0, BAR_HEIGHT - white_bar_height, BAR_WIDTH, white_bar_height))  # White bar
-        p.draw.rect(screen, p.Color("#000000"), (0, 0, BAR_WIDTH, BAR_HEIGHT - white_bar_height))                 # Black bar
-    else:
-        eval_text = font.render(f"{abs(eval_value):.2f}", True, p.Color("#9b9b9b"))
+    else:     
         text_rect = eval_text.get_rect(center=(BAR_WIDTH // 2, 20))  # All the way up
-        p.draw.rect(screen, p.Color("#ffffff"), (0, BAR_HEIGHT - white_bar_height, BAR_WIDTH, white_bar_height))  # White bar
-        p.draw.rect(screen, p.Color("#000000"), (0, 0, BAR_WIDTH, BAR_HEIGHT - white_bar_height))                 # Black bar
+    p.draw.rect(screen, p.Color("#ffffff"), (0, BAR_HEIGHT - white_bar_height, BAR_WIDTH, white_bar_height))  # White bar
+    p.draw.rect(screen, p.Color("#000000"), (0, 0, BAR_WIDTH, BAR_HEIGHT - white_bar_height))                 # Black bar
+
     # Display the evaluation value
-    draw_up = False
-    draw_down = False
-    color = p.Color("#ffffff") if gs.whiteToMove else p.Color("#000000")
+    draw_black = False 
+    draw_white = False
     if mate_moves == 0:   
-        eval_text = font.render("1-0", True, p.Color("#9b9b9b"))
         if gs.whiteToMove: 
-            draw_up = True
-            p.draw.rect(screen, p.Color("#000000"), (0, 0, BAR_WIDTH, BAR_HEIGHT))    # Black bar
+            draw_black = True
+            text = "0-1"
         else:
-            draw_down = True
-            p.draw.rect(screen, p.Color("#ffffff"), (0, 0, BAR_WIDTH, BAR_HEIGHT))    # White bar
+            draw_white = True
+            text = "1-0"
+        eval_text = font.render(text, True, p.Color("#9b9b9b"))
     elif mate_moves is not None:
         eval_text = font.render(f"M{mate_moves}", True, p.Color("#9b9b9b"))
         if gs.whiteToMove:
-            draw_down = True
-            p.draw.rect(screen, p.Color("#ffffff"), (0, 0, BAR_WIDTH, BAR_HEIGHT))      # White bar
+            draw_white = True
         else:
-            draw_up = True
-            p.draw.rect(screen, p.Color("#000000"), (0, 0, BAR_WIDTH, BAR_HEIGHT))      # Black bar
-    if draw_up:
-        text_rect = eval_text.get_rect(center=(BAR_WIDTH // 2, 20))  # All the way up
-    if draw_down:
-        text_rect = eval_text.get_rect(center=(BAR_WIDTH // 2, BAR_HEIGHT - 20))
+            draw_black = True
+    if draw_black:
+        text_rect = eval_text.get_rect(center=(BAR_WIDTH // 2, 20))                 # All the way up
+        p.draw.rect(screen, p.Color("#000000"), (0, 0, BAR_WIDTH, BAR_HEIGHT))      # Black bar
+    if draw_white:
+        text_rect = eval_text.get_rect(center=(BAR_WIDTH // 2, BAR_HEIGHT - 20))    # All the way down
+        p.draw.rect(screen, p.Color("#ffffff"), (0, 0, BAR_WIDTH, BAR_HEIGHT))      # White bar
+    
     screen.blit(eval_text, text_rect)
 
 def draw_selection(screen, gs, sqSelected, is_selected):
