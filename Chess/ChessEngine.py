@@ -23,6 +23,8 @@ class GameState():
             ["wp", "wp", "wp", "wp", "wp", "wp", "wp", "wp"],
             ["wR", "wN", "wB", "wQ", "wK", "wB", "wN", "wR"]
         ])
+        self.lenRow = len(self.board)
+        self.lenCol = len(self.board[0])
         # Dictionary to map the piece to its move function
         self.moveFunctions = {"p": self.get_pawn_moves, "R": self.get_rook_moves, "N": self.get_knight_moves, 
                               "B": self.get_bishop_moves, "Q": self.get_queen_moves, "K": self.get_king_moves}
@@ -73,12 +75,12 @@ class GameState():
         if self.whiteToMove: # White pawn moves
             next_row = row - 1
             next_2_row = row - 2
-            start_row = 6
+            start_row = self.lenRow - 2
             other_player = 'b'
         else: # Black pawn moves
             next_row = row + 1
             next_2_row = row + 2
-            start_row = 1
+            start_row = self.lenRow - 7
             other_player = 'w'
 
         if self.board[next_row][col] == "--": # 1 square pawn advance
@@ -88,16 +90,16 @@ class GameState():
         if col - 1 >= 0: # Capture to the left/right
             if self.board[next_row][col - 1][0] == other_player:
                 moves.append(Move((row, col), (next_row, col - 1), self.board))
-        if col + 1 <= 7: # Capture to the right/left
+        if col + 1 <= self.lenCol - 1: # Capture to the right/left
             if self.board[next_row][col + 1][0] == other_player:
                 moves.append(Move((row, col), (next_row, col + 1), self.board))     
         
     def get_rook_moves(self, row, col, moves):
-        if row+1 <= 7:
+        if row+1 <= self.lenRow - 1:
             self.rook_helper(row+1,len(self.board[row]),  1, "row", row, col, moves)
         if row-1 >= 0:
             self.rook_helper(row-1, -1, -1, "row", row, col, moves)
-        if col+1 <= 7:
+        if col+1 <= self.lenCol - 1:
             self.rook_helper(col+1, len(self.board[row]), 1, "col", row, col, moves)
         if col-1 >= 0:
             self.rook_helper(col-1, -1, -1, "col", row, col, moves)
@@ -131,16 +133,16 @@ class GameState():
         
         for move in knight_moves:
             r, c = move
-            if 0 <= r < len(self.board) and 0 <= c < len(self.board[0]):
+            if 0 <= r < self.lenRow and 0 <= c < self.lenCol:
                 if self.board[r][c] == "--" or self.board[r][c][0] != self.board[row][col][0]:
                     moves.append(Move((row, col), (r, c), self.board))
 
     def get_bishop_moves(self, row, col, moves):
-        if row+1 <= 7 and col+1 <= 7:
+        if row+1 <= self.lenRow - 1 and col+1 <= self.lenCol - 1:
             self.bishop_helper(row+1, col+1, 1, 1, row, col, moves)
-        if row+1 <= 7 and col-1 >= 0:
+        if row+1 <= self.lenRow - 1 and col-1 >= 0:
             self.bishop_helper(row+1, col-1, 1, -1, row, col, moves)
-        if row-1 >= 0 and col+1 <= 7:
+        if row-1 >= 0 and col+1 <= self.lenCol - 1:
             self.bishop_helper(row-1, col+1, -1, 1, row, col, moves)
         if row-1 >= 0 and col-1 >= 0:
             self.bishop_helper(row-1, col-1, -1, -1, row, col, moves)
@@ -148,7 +150,7 @@ class GameState():
     
     def bishop_helper(self, start_row, start_col, row_step, col_step, row, col, moves):
         r, c = start_row, start_col
-        while 0 <= r < len(self.board) and 0 <= c < len(self.board[0]):
+        while 0 <= r < self.lenRow and 0 <= c < self.lenCol:
             if self.board[r][c] == "--":
                 moves.append(Move((row, col), (r, c), self.board))
             else:
@@ -163,19 +165,19 @@ class GameState():
         moves.append(self.get_bishop_moves(row, col, moves))
 
     def get_king_moves(self, row, col, moves):
-        if row+1 <= 7:
+        if row+1 <= self.lenRow - 1:
             self.king_helper(row+1, col, row, col, moves)
         if row-1 >= 0:
             self.king_helper(row-1, col, row, col, moves)
-        if col+1 <= 7:
+        if col+1 <= self.lenCol - 1:
             self.king_helper(row, col+1, row, col, moves)
         if col-1 >= 0:
             self.king_helper(row, col-1, row, col, moves)
-        if row+1 <= 7 and col+1 <= 7:
+        if row+1 <= self.lenRow -1 and col+1 <= self.lenCol - 1:
             self.king_helper(row+1, col+1, row, col, moves)
-        if row+1 <= 7 and col-1 >= 0:
+        if row+1 <= self.lenRow - 1 and col-1 >= 0:
             self.king_helper(row+1, col-1, row, col, moves)
-        if row-1 >= 0 and col+1 <= 7:
+        if row-1 >= 0 and col+1 <= self.lenCol - 1:
             self.king_helper(row-1, col+1, row, col, moves)
         if row-1 >= 0 and col-1 >= 0:
             self.king_helper(row-1, col-1, row, col, moves)
@@ -238,7 +240,7 @@ class GameState():
     
     def get_evaluation(self):
         try:
-            stockfish = Stockfish("/opt/homebrew/bin/stockfish", parameters={"Threads": 2, "Hash": 1024})
+            stockfish = Stockfish(r"C:\Users\Frosso.FrossoPC\Documents\stockfish\stockfish.exe", parameters={"Threads": 2, "Hash": 1024}) # /opt/homebrew/bin/stockfish
             fen = self.get_fen()
             stockfish.set_fen_position(fen)
             evaluation = stockfish.get_evaluation()
