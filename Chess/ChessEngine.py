@@ -246,7 +246,7 @@ class GameState():
 
             # Convert evaluation to centipawns if not mate
             if evaluation["type"] == "cp":
-                eval_value = round(evaluation["value"] * 0.01, 2)
+                eval_value = round(evaluation["value"] * 0.01, 1)
                 mate_moves = None
             elif evaluation["type"] == "mate":
                 eval_value = 10      
