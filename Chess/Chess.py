@@ -26,11 +26,10 @@ def load_images():
         )
 
 # Draws graphics of current game state 
-def draw_game_state(screen, gs):
-    draw_board(screen)                                    # Draw the squares on the board
-    draw_pieces(screen, gs.board)                         # Draw the pieces on top of the squares
-    eval_value, mate_moves = gs.get_evaluation()
-    draw_eval_bar(screen, eval_value, mate_moves, gs)    # Draw the evaluation bar
+def draw_game_state(screen, gs):    
+    draw_board(screen)                                      # Draw the squares on the board
+    draw_pieces(screen, gs.board)                           # Draw the pieces on top of the squares
+    draw_eval_bar(screen, gs)                               # Draw the evaluation bar
     
 # Draw the squares on the board
 def draw_board(screen):
@@ -58,7 +57,8 @@ def draw_pieces(screen, board):
                 )
 
 # Function to draw the evaluation bar
-def draw_eval_bar(screen, eval_value, mate_moves, gs):
+def draw_eval_bar(screen, gs):
+    eval_value, mate_moves = gs.get_evaluation()
     font = p.font.SysFont("Consolas", 14, bold=True)
 
     # Scale evaluation value to the range (-10 to 10) and normalize
