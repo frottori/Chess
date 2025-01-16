@@ -66,7 +66,7 @@ def draw_eval_bar(screen, eval_value, mate_moves, gs):
     white_bar_height = int((eval_clamped + 10) / 20 * HEIGHT)  # Normalize to [0, HEIGHT]
 
     # Display the evaluation value 
-    eval_text = font.render(f"{abs(eval_value):.2f}", True, p.Color("#9b9b9b"))
+    eval_text = font.render(f"{abs(eval_value):.1f}", True, p.Color("#9b9b9b"))
     if eval_value > 0:
         text_rect = eval_text.get_rect(center=(BAR_WIDTH // 2, BAR_HEIGHT - 20))  # All the way down
     else:     
