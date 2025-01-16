@@ -239,7 +239,7 @@ class GameState():
     def get_evaluation(self):
         try:
             stockfish = Stockfish("/opt/homebrew/bin/stockfish", parameters={"Threads": 2, "Hash": 1024})
-            stockfish.set_depth(17)
+            # stockfish.set_depth(17)
             fen = self.get_fen()
             stockfish.set_fen_position(fen)
             evaluation = stockfish.get_evaluation()
@@ -249,7 +249,7 @@ class GameState():
                 eval_value = round(evaluation["value"] * 0.01, 2)
                 mate_moves = None
             elif evaluation["type"] == "mate":
-                eval_value = 10 if evaluation["value"] >= 0 else -10      
+                eval_value = 10      
                 mate_moves = abs(evaluation["value"])   
         except StockfishException:
             eval_value = 0
