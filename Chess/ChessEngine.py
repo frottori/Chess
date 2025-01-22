@@ -5,7 +5,6 @@ Information about current game state. Evaluates valid moves at current state. Ke
 import numpy as np
 from stockfish import Stockfish
 from stockfish import StockfishException
-import chess
 
 class GameState():
     def __init__(self):
@@ -204,7 +203,7 @@ class GameState():
     
     def get_evaluation(self):
         try:
-            stockfish = Stockfish(r"C:\Users\Frosso.FrossoPC\Documents\stockfish\stockfish.exe", parameters={"Threads": 2, "Hash": 1024}) # /opt/homebrew/bin/stockfish
+            stockfish = Stockfish(r"/usr/games/stockfish", parameters={"Threads": 2, "Hash": 1024}) # /opt/homebrew/bin/stockfish
             fen = self.get_fen()
             stockfish.set_fen_position(fen)
             evaluation = stockfish.get_evaluation()
