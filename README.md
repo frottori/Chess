@@ -1,6 +1,6 @@
 # Chess Game and Engine
 An implementation of Chess with a player vs Computer (Engine). 
-Evaluating correct and valud moves and the Wngine choose to play the best move based on it's calculations. Compared with Stockfish the chess game engine that has the highest elo in the world we evaluate our chess engine and how efficient it is on evaluating the best move.
+Evaluating correct and valid moves and the Engine choose to play the best move based on it's calculations. Compared with Stockfish the chess game engine that has the highest elo in the world we evaluate our chess engine and how efficient it is on evaluating the best move.
 
 <p align="center">
     <img src="demo_images/demo1.png" alt="Demo 1" width="350" height="350">
