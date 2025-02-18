@@ -204,7 +204,7 @@ class GameState():
     
     def get_evaluation(self):
         try:
-            stockfish = Stockfish(r"C:\Users\Frosso.FrossoPC\Documents\stockfish\stockfish.exe", parameters={"Threads": 2, "Hash": 1024}) # /opt/homebrew/bin/stockfish
+            stockfish = Stockfish(r"/opt/homebrew/bin/stockfish", parameters={"Threads": 2, "Hash": 1024}) 
             fen = self.get_fen()
             stockfish.set_fen_position(fen)
             evaluation = stockfish.get_evaluation()
