@@ -1,6 +1,6 @@
 # Chess Game and Engine
 An implementation of Chess with a player vs Computer (Engine). 
-Evaluating correct and valid moves and the Engine choose to play the best move based on it's calculations. Compared with Stockfish the chess game engine that has the highest elo in the world we evaluate our chess engine and how efficient it is on evaluating the best move.
+Evaluating correct and valid moves and the Engine chooses to play the best move based on it's calculations. Compared with Stockfish the chess game engine that has the highest elo in the world we evaluate our chess engine and how efficient it is on evaluating the best move.
 
 <p align="center">
     <img src="demo_images/demo1.png" alt="Demo 1" width="350" height="350">
@@ -12,7 +12,7 @@ Evaluating correct and valid moves and the Engine choose to play the best move b
 </p>
 
 ## File Structure 
-- `Chess`: The whole implementation of the chess game (pygame) and the game engine with use of algorithm Alpha Beta Pruning for evaluatins the best move.
+- `Chess`: The whole implementation of the chess game (pygame) and the game engine with the use of the algorithm **Alpha Beta Pruning** for evaluating the best move.
 - `Chess.com_API`: [Published-Data API from Chess.com](https://www.chess.com/news/view/published-data-api#pubapi-general) is a read-only REST API that has information such as player data, game data, and club/tournament information. 
     - [Documentation](https://chesscom.readthedocs.io/en/latest/)
     - Gather already established games from reputable chess players that have also been evaluated by "human" chess theory.
